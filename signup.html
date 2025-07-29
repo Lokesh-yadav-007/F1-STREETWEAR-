@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .signup-container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2, p {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .otp-section {
+      display: none;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <form id="signupForm">
+      <h2>Create Account</h2>
+      <p>Register to start shopping with us</p>
+
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required placeholder="Your name">
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" required placeholder="you@example.com">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" required placeholder="Enter password">
+
+      <label for="confirm">Confirm Password</label>
+      <input type="password" id="confirm" required placeholder="Re-enter password">
+
+      <div class="otp-section" id="otpSection">
+        <label for="otp">Enter OTP</label>
+        <input type="text" id="otp" placeholder="Enter OTP sent to your email">
+      </div>
+
+      <button type="submit" id="submitBtn">Sign Up</button>
+
+      <div class="login-link">
+        Already have an account? <a href="login.html">Login here</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("signupForm");
+    const otpSection = document.getElementById("otpSection");
+    const otpInput = document.getElementById("otp");
+    const submitBtn = document.getElementById("submitBtn");
+
+    let generatedOTP = "";
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      if (!otpSection.style.display || otpSection.style.display === "none") {
+        // First step: Validate and show OTP
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const pass = document.getElementById("password").value;
+        const confirm = document.getElementById("confirm").value;
+
+        if (!name || !email || !pass || !confirm) {
+          alert("Please fill all fields.");
+          return;
+        }
+
+        if (pass !== confirm) {
+          alert("Passwords do not match!");
+          return;
+        }
+
+        // Simulate sending OTP
+        generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        alert(`OTP sent to ${email}: ${generatedOTP}`);
+        otpSection.style.display = "block";
+        submitBtn.textContent = "Verify OTP";
+      } else {
+        // Second step: Verify OTP
+        if (otpInput.value === generatedOTP) {
+          alert("Account created successfully!");
+          form.reset();
+          otpSection.style.display = "none";
+          submitBtn.textContent = "Sign Up";
+        } else {
+          alert("Invalid OTP. Please try again.");
+        }
+      }
+    });
+  </script>
+</body>
+</html>

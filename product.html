@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Detail</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Product Detail</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="tees.html">Tees</a>
+      <a href="jackets.html">Jackets</a>
+      <a href="caps.html">Caps</a>
+      <a href="accessories.html">Accessories</a>
+      <a href="limited.html">Limited</a>
+    </nav>
+  </header>
+
+  <section class="product-detail" id="productContainer">
+    <!-- Product content will be inserted here -->
+  </section>
+
+  <script>
+    const products = [
+      {
+        id: 1,
+        name: "Bomber Jacket",
+        price: 999,
+        image: "bomber jacket.jpeg"
+      },
+      {
+        id: 2,
+        name: "White Jacket",
+        price: 999,
+        image: "b&w jacket.jpg"
+      },
+      {
+        id: 3,
+        name: "Black Jacket",
+        price: 999,
+        image: "black jacket.jpg"
+      },
+      {
+        id: 4,
+        name: "Black Leather Jacket",
+        price: 999,
+        image: "black leather jacket.jpg"
+      }
+    ];
+
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"));
+    const product = products.find(p => p.id === id);
+
+    const container = document.getElementById("productContainer");
+
+    if (product) {
+      container.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" style="max-width: 100%; border-radius: 10px;" />
+        <h2>${product.name}</h2>
+        <p>Price: ₹${product.price}</p>
+        <button onclick="addToCart('${product.name}', ${product.price})" class="bT">Add to Cart</button>
+      `;
+    } else {
+      container.innerHTML = `<p style="color: red;">Product not found.</p>`;
+    }
+
+    function addToCart(productName, price) {
+      alert(`${productName} added to cart for ₹${price}`);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search | F1 Streetwear</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #000;
+    }
+
+    nav a {
+      color: #eee;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
+    .search-form {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-form input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+      width: 200px;
+    }
+
+    .search-form button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    .search-form button:hover {
+      background-color: #b30000;
+    }
+
+    main {
+      padding: 2rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .product-card {
+  background: #1c1c1c;
+  border: 2px solid red;
+  border-radius: 12px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 0; /* Remove internal padding */
+  width: 220px; /* Match image width */
+}
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
+    }
+
+   .product-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 0; /* Remove internal radius */
+  display: block;
+}
+
+
+    .product-card h4 {
+      margin: 0.5rem 0 0.3rem;
+      font-size: 1.2rem;
+    }
+
+    .product-card p {
+      margin: 0;
+      color: #ccc;
+    }
+
+    .product-card a {
+      display: inline-block;
+      margin-top: 0.8rem;
+      padding: 0.5rem 1rem;
+      background: red;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .product-card a:hover {
+      background-color: #c10000;
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #aaa;
+    }
+
+    .not-found {
+      text-align: center;
+      color: red;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>F1 Streetwear</h1>
+    <div style="flex: 1; display: flex; justify-content: center;">
+      <form class="search-form" id="searchForm">
+        <input type="text" id="searchInput" placeholder="Search products..." required />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Search Results</h2>
+    <div id="results" class="product-grid">
+      <p class="loading">Loading products...</p>
+    </div>
+  </main>
+
+  <script>
+    const productGrid = document.getElementById("results");
+    const allProducts = [
+      {
+        id: 1,
+        name: "Black Jacket",
+        price: 999,
+        image: "black jacket.jpg"
+      },
+      {
+        id: 2,
+        name: "White Jacket",
+        price: 999,
+        image: "b&w jacket.jpg"
+      },
+      {
+        id: 3,
+        name: "Speed Tee",
+        price: 499,
+        image: "images/product1.jpg"
+      },
+      {
+        id: 4,
+        name: "F1 Cap",
+        price: 199,
+        image: "images/product2.jpg"
+      }
+    ];
+
+    function displayProducts(query) {
+      const filtered = allProducts.filter(product =>
+        product.name.toLowerCase().includes(query.toLowerCase())
+      );
+
+      if (filtered.length === 0) {
+        productGrid.innerHTML = `<p class='not-found'>No products found for "<strong>${query}</strong>"</p>`;
+        return;
+      }
+
+      productGrid.innerHTML = filtered.map(p => `
+        <div class="product-card">
+          <img src="${p.image}" alt="${p.name}" />
+          <h4>${p.name}</h4>
+          <p>₹${p.price}</p>
+          <a href="product-detail.html?name=${encodeURIComponent(p.name)}">View</a>
+        </div>
+      `).join('');
+    }
+
+    // Initial render
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get("query") || "";
+    displayProducts(query);
+
+    // Handle new searches
+    document.getElementById("searchForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const searchValue = document.getElementById("searchInput").value;
+      if (searchValue.trim()) {
+        displayProducts(searchValue);
+        window.history.pushState({}, "", `?query=${encodeURIComponent(searchValue)}`);
+      }
+    });
+  </script>
+</body>
+</html>
